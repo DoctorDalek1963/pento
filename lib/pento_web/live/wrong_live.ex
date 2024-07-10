@@ -15,17 +15,17 @@ defmodule PentoWeb.WrongLive do
     ~H"""
     <h1>Your score: <%= @score %></h1>
     <h2><%= @message %></h2>
-    <%= if @has_won do %>
-      <.link navigate={~p"/guess"}><strong>Reset</strong></.link>
-    <% else %>
-      <h2>
+    <h2 class="my-2">
+      <%= if @has_won do %>
+        <.link navigate={~p"/guess"}><strong>Reset</strong></.link>
+      <% else %>
         <%= for n <- 1..10 do %>
-          <.link href="#" phx-click="guess" phx-value-number={n}>
+          <.link href="#" phx-click="guess" phx-value-number={n} class="mx-2">
             <%= n %>
           </.link>
         <% end %>
-      </h2>
-    <% end %>
+      <% end %>
+    </h2>
     """
   end
 
