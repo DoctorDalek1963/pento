@@ -29,17 +29,24 @@ defmodule PentoWeb.WrongLive do
     """
   end
 
-  def handle_event("guess", %{"number" => number}, socket) do
-    if number == to_string(socket.assigns.target) do
-      message = "Your guess: #{number}. Correct! You win!"
-      score = socket.assigns.score + 1
-
-      {:noreply, assign(socket, score: score, message: message, has_won: true)}
+  def handle_event(
+        "guess",
+        %{"number" => number},
+        %Phoenix.LiveView.Socket{assigns: %{score: score, target: target}} = socket
+      ) do
+    if number == to_string(target) do
+      {:noreply,
+       assign(socket,
+         score: score + 1,
+         message: "Your guess: #{number}. Correct! You win!",
+         has_won: true
+       )}
     else
-      message = "Your guess: #{number}. Wrong. Guess again:"
-      score = socket.assigns.score - 1
-
-      {:noreply, assign(socket, score: score, message: message)}
+      {:noreply,
+       assign(socket,
+         score: score - 1,
+         message: "Your guess: #{number}. Wrong. Guess again:"
+       )}
     end
   end
 end
