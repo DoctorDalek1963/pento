@@ -2,13 +2,7 @@ defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
 
   def mount(_params, _session, socket) do
-    {:ok,
-     assign(socket,
-       score: 0,
-       message: "Make a guess:",
-       target: :rand.uniform(10),
-       has_won: false
-     )}
+    {:ok, assign(socket, score: 0)}
   end
 
   def render(assigns) do
@@ -17,7 +11,7 @@ defmodule PentoWeb.WrongLive do
     <h2><%= @message %></h2>
     <h2 class="my-2">
       <%= if @has_won do %>
-        <.link navigate={~p"/guess"}><strong>Reset</strong></.link>
+        <.link patch={~p"/guess"}><strong>Play again</strong></.link>
       <% else %>
         <%= for n <- 1..10 do %>
           <.link href="#" phx-click="guess" phx-value-number={n} class="mx-2">
@@ -48,5 +42,14 @@ defmodule PentoWeb.WrongLive do
          message: "Your guess: #{number}. Wrong. Guess again:"
        )}
     end
+  end
+
+  def handle_params(%{}, _uri, socket) do
+    {:noreply,
+     assign(socket,
+       message: "Make a guess:",
+       target: :rand.uniform(10),
+       has_won: false
+     )}
   end
 end
